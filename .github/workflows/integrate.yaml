@@ -22,7 +22,7 @@ jobs:
                 cache-dependency-path: Server/package-lock.json
 
             - name: installing dependencies
-              run: npm install
+              run: npm ci
 
             - name: building app
               run: npm run build
@@ -32,6 +32,10 @@ jobs:
         defaults:
           run:
             working-directory: ./Server
+        env:
+          DEVCONNECT_TOKEN_KEY: ${{ secrets.DEVCONNECT_TOKEN_KEY }}
+          MONGODB_URI : ${{secrets.MONGODB_URI}}
+          
         steps:
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v3
@@ -40,7 +44,7 @@ jobs:
                 cache: 'npm'
                 cache-dependency-path: Server/package-lock.json
             - name: installing dependencies
-              run:  npm install
+              run:  npm ci
 
             - name: running tests
               run:  npm run test
