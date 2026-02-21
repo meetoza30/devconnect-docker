@@ -10,14 +10,19 @@ import 'dotenv/config'
 const authRouter = express.Router()
 
 authRouter.post('/signup', async (req, res)=>{
-    const {fullName, emailId, userName,age, gradYear, projects, gender, password, skills, hackathons, bio, socials} = req.body;
-    
-    const hashedPassword = await bcrypt.hash(password, 10)
-    const user = new User({fullName, emailId, userName, age, gradYear, gender, projects : [], hackathons : [], password: hashedPassword, skills, bio, socials});
+    console.log(req.body.fullName)
     try{
-        validateData(req)
+    const {fullName, emailId, userName,age, gradYear, projects, gender, password, skills, hackathons, bio, socials} = req.body;
+    // validateData(req)
+    console.log(emailId);
+    const hashedPassword = await bcrypt.hash(password, 10)
+    console.log("hashed password : ", hashedPassword)
+    const user = new User({fullName, emailId, userName, age, gradYear, gender, projects : [], hackathons : [], password: hashedPassword, skills, bio, socials});
+        
         const token = await user.getJWToken();
-        await user.save();
+        const savedUser = await user.save();
+        console.log("token : ", token)
+        console.log("saved user : ", savedUser)
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production", // Use secure in production
@@ -25,7 +30,7 @@ authRouter.post('/signup', async (req, res)=>{
             path: "/", // Important! Add path to ensure it's available throughout the site
             maxAge: 24 * 60 * 60 * 1000, // 1 Day
         });
-        res.json({user, message : "User saved successfully", token})
+        res.status(200).json({user, message : "User saved successfully", token})
         
     }
     catch(err){
@@ -36,7 +41,7 @@ authRouter.post('/signup', async (req, res)=>{
 
 authRouter.post('/login', async (req,res)=>{
     try{
-        console.log(req.body.emailId);
+        // console.log(req.body.emailId);
         const user = await User.findOne({emailId : req.body.emailId})
     if(!user) throw new Error("Invalid Credentials");
     const isPasswordValid = await bcrypt.compare(req.body.password, user?.password);
@@ -46,6 +51,7 @@ authRouter.post('/login', async (req,res)=>{
     if(!isPasswordValid) throw new Error("Invalid Credentials")
     else if(isPasswordValid){
         const token = await user.getJWToken();
+        console.log("token : ", token)
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production", // Use secure in production
@@ -53,7 +59,7 @@ authRouter.post('/login', async (req,res)=>{
             path: "/", 
             maxAge: 30*24 * 60 * 60 * 1000,
         });
-        res.json({message : "Login Successfully!!", token})
+        res.status(200).json({message : "Login Successfully!!", token})
         }
     }
 catch(err){

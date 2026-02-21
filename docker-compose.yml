@@ -1,0 +1,29 @@
+services:
+ mongo:
+  image : mongo
+  ports:
+   - 27017:27017
+  volumes: 
+   - "devconnect-volume:/data/db"
+
+ server:
+  build:
+   context: ./Server/
+   dockerfile: Dockerfile
+  ports:
+   - 4000:4000
+  depends_on:
+   - mongo
+  env_file:
+   - ./Server/.env
+
+ client:
+  build:
+   context: ./Client/
+   dockerfile: Dockerfile
+  ports:
+   - 3000:80
+  
+
+volumes: 
+ devconnect-volume:

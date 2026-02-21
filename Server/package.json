@@ -5,7 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "dev" : "nodemon app.js",
+    "test": "node --experimental-vm-modules ./node_modules/jest-cli/bin/jest.js"
   },
   "repository": {
     "type": "git",
@@ -32,5 +34,10 @@
     "nodemailer": "^7.0.3",
     "socket.io": "^4.8.1",
     "validator": "^13.12.0"
+  },
+  "devDependencies": {
+    "jest": "^30.2.0",
+    "mongodb-memory-server": "^11.0.1",
+    "supertest": "^7.2.2"
   }
 }
