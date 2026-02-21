@@ -1,7 +1,3 @@
-// Tests for: POST /signup, /login, /google/login,
-//            /forgotPassword, PATCH /resetPassword,
-//            POST /logout, GET /check-auth
-
 import request from 'supertest';
 import app from '../../app.js'
 import { connect, closeDatabase, clearDatabase } from './setup.js';
