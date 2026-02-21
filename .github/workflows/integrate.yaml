@@ -1,0 +1,33 @@
+name : Integrate
+
+on: 
+    push:
+        branches: ["main"]
+
+    pull_request:
+        branches: ["main"]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v3
+
+            - name: installing dependencies
+              run: npm install
+
+            - name: building app
+              run: npm run build
+    
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v3
+
+            - name: installing dependencies
+              run: npm install
+
+            - name: running tests
+              run: npm run test
