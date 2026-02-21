@@ -10,6 +10,9 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
+        defaults:
+          run:
+            working-directory: ./Server
         steps:
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v3
@@ -18,19 +21,22 @@ jobs:
                 cache: 'npm'
 
             - name: installing dependencies
-              run: /Server npm install
+              run: npm install
 
             - name: building app
-              run: /Server npm run build
+              run: npm run build
     
     test:
         runs-on: ubuntu-latest
+        defaults:
+          run:
+            working-directory: ./Server
         steps:
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v3
 
             - name: installing dependencies
-              run: /Server npm install
+              run:  npm install
 
             - name: running tests
-              run: /Server npm run test
+              run:  npm run test
