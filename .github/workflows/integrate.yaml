@@ -1,0 +1,50 @@
+name : Integrate
+
+on: 
+    push:
+        branches: ["main"]
+
+    pull_request:
+        branches: ["main"]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        defaults:
+          run:
+            working-directory: ./Server
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v3
+              with:
+                node-version: '20.x'
+                cache: 'npm'
+                cache-dependency-path: Server/package-lock.json
+
+            - name: installing dependencies
+              run: npm ci
+
+            - name: building app
+              run: npm run build
+    
+    test:
+        runs-on: ubuntu-latest
+        defaults:
+          run:
+            working-directory: ./Server
+        env:
+          DEVCONNECT_TOKEN_KEY: ${{ secrets.DEVCONNECT_TOKEN_KEY }}
+          MONGODB_URI : ${{secrets.MONGODB_URI}}
+          
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v3
+              with:
+                node-version: '20.x'
+                cache: 'npm'
+                cache-dependency-path: Server/package-lock.json
+            - name: installing dependencies
+              run:  npm ci
+
+            - name: running tests
+              run:  npm run test
