@@ -33,13 +33,12 @@ jobs:
               run: npm run build
 
             - name: SonarQube Scan
-              uses: SonarSource/sonarqube-scan-action@7295e71c9583053f5bf40e9d4068a0c974603ec8
+              uses: SonarSource/sonarcloud-github-action@v2
+              with:
+                projectBaseDir: Client
               env:
                 SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-                SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-              with:
-                args:
-                    -Dsonar.projectKey=${{secrets.SONAR_PROJECT_KEY}}
+              
             
 
 
